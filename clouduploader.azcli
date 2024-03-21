@@ -1,0 +1,28 @@
+#!/bin/bash
+export AZURE_STORAGE_ACCOUNT=
+export AZURE_STORAGE_KEY=
+export AZURE_STORAGE_CONNECTION_STRING=
+container=clouduploadcontainer
+upload () {
+    if [ -f $1 ]; then
+       az storage blob upload --file $1 -c $container --output table 
+        if [ $? -eq 0 ]; then
+            echo "File $1 uploaded successfully."
+        else
+            echo "There was an issue"
+        fi
+    else 
+        echo "File $1 Not Found."
+    fi
+}
+while [ true ]; do
+    echo "====================================="
+    echo "Welcome to the Cloud Uploader CLI."
+    read -p "Enter file name with extension to upload or type exit to close the program: " command
+
+    if [ $command == "exit" ]; then 
+        exit 1
+    else
+        upload $command
+    fi
+done
